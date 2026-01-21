@@ -1,4 +1,4 @@
-![Description of 1](./images/Gaming in the Cloud (1)-01.png)
+![Description of 1](./images/1.png)
 ![Description of 2](./images/Gaming in the Cloud (1)-02.png)
 ![Description of 3](./images/Gaming in the Cloud (1)-03.png)
 ![Description of 4](./images/Gaming in the Cloud (1)-04.png)
