@@ -1,2 +1,11 @@
-# snow6060.github.io
-Research Paper
+![Description of 1](./images/Gaming in the Cloud (1)-01.png)
+![Description of 2](./images/Gaming in the Cloud (1)-02.png)
+![Description of 3](./images/Gaming in the Cloud (1)-03.png)
+![Description of 4](./images/Gaming in the Cloud (1)-04.png)
+![Description of 5](./images/Gaming in the Cloud (1)-05.png)
+![Description of 6](./images/Gaming in the Cloud (1)-06.png)
+![Description of 7](./images/Gaming in the Cloud (1)-07.png)
+![Description of 8](./images/Gaming in the Cloud (1)-08.png)
+![Description of 9](./images/Gaming in the Cloud (1)-09.png)
+![Description of 10](./images/Gaming in the Cloud (1)-10.png)
+![Description of 11](./images/Gaming in the Cloud (1)-11.png)
