@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      width: 100vw;
+      height: 100vh;
+      background: #010408;
+      overflow: hidden;
+    }
+
+    /* Canvas now fills entire viewport so grid can extend left & bottom */
+    #theme-container {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      overflow: hidden;
+    }
+  </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+</head>
+<body>
+
+  <div id="theme-container"></div>
+
+  <script>
+    const container = document.getElementById('theme-container');
+
+    /* ── Reference dimensions: the original 520×220 "window" ── */
+    const REF_W = 520;
+    const REF_H = 220;
+    const REF_FOV = 48; // degrees
+    const REF_NEAR = 0.1;
+    const REF_FAR = 1000;
+
+    /* Pre-compute the original frustum edges at the near plane.
+       These define what the top-right 520×220 pixels must show. */
+    const halfH = REF_NEAR * Math.tan(THREE.MathUtils.degToRad(REF_FOV / 2));
+    const halfW = halfH * (REF_W / REF_H);
+    // Original symmetric frustum: L=-halfW, R=+halfW, T=+halfH, B=-halfH
+
+    const scene = new THREE.Scene();
+
+    // 1. Camera — position & orientation are IDENTICAL to the original
+    const camera = new THREE.PerspectiveCamera(REF_FOV, REF_W / REF_H, REF_NEAR, REF_FAR);
+    camera.position.set(2.2, 5.8, 6.5);
+    camera.lookAt(0.2, -0.8, 0.0);
+
+    /**
+     * Build an asymmetric frustum so that the TOP-RIGHT (REF_W × REF_H) pixels
+     * of the full viewport map to exactly the same frustum as the original code.
+     * Extra pixels to the left and bottom just reveal more scene.
+     */
+    function updateProjection() {
+      const W = container.clientWidth  || REF_W;
+      const H = container.clientHeight || REF_H;
+
+      // How much extra canvas do we have beyond the reference region?
+      const extraLeft   = Math.max(0, W - REF_W);   // pixels added on the left
+      const extraBottom = Math.max(0, H - REF_H);   // pixels added on the bottom
+
+      // Frustum-units per pixel (derived from the original view)
+      const frustumPerPxH = (2 * halfH) / REF_H;
+      const frustumPerPxW = (2 * halfW) / REF_W;
+
+      // Extend frustum to the left and downward
+      const newLeft   = -halfW - extraLeft   * frustumPerPxW;
+      const newRight  =  halfW;                               // unchanged
+      const newTop    =  halfH;                               // unchanged
+      const newBottom = -halfH - extraBottom * frustumPerPxH;
+
+      camera.projectionMatrix.makePerspective(
+        newLeft, newRight, newTop, newBottom, REF_NEAR, REF_FAR
+      );
+      camera.projectionMatrixInverse.copy(camera.projectionMatrix).invert();
+    }
+
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+    function resizeRenderer() {
+      const W = container.clientWidth  || REF_W;
+      const H = container.clientHeight || REF_H;
+      renderer.setSize(W, H);
+      updateProjection();
+      const dpr = window.devicePixelRatio || 1;
+      planeUniforms.uScreenHeight.value = H * dpr;
+      planeUniforms.uScreenWidth.value  = W * dpr;
+    }
+
+    container.appendChild(renderer.domElement);
+
+    // 2. Main Group — IDENTICAL to original
+    const mainGroup = new THREE.Group();
+    mainGroup.position.set(1.85, 0.25, -0.6);
+    mainGroup.rotation.x = 0.22;
+    mainGroup.rotation.y = -Math.PI * 0.26;
+    mainGroup.rotation.z = 0.08;
+    scene.add(mainGroup);
+
+    // 3. Binary Stars — IDENTICAL to original
+    const orbitRadius = 0.58;
+    const orbitSpeed = 2.2;
+
+    const sphereGeo = new THREE.SphereGeometry(0.30, 32, 32);
+    const sphereMat = new THREE.MeshBasicMaterial({ color: 0xffffff });
+
+    const ball1 = new THREE.Mesh(sphereGeo, sphereMat);
+    const ball2 = new THREE.Mesh(sphereGeo, sphereMat);
+
+    // Bright cyan halo around stars
+    const glowGeo = new THREE.SphereGeometry(0.48, 32, 32);
+    const glowMat = new THREE.MeshBasicMaterial({
+      color: 0x66e5ff,
+      transparent: true,
+      opacity: 0.75,
+      blending: THREE.AdditiveBlending
+    });
+    ball1.add(new THREE.Mesh(glowGeo, glowMat));
+    ball2.add(new THREE.Mesh(glowGeo, glowMat));
+
+    mainGroup.add(ball1);
+    mainGroup.add(ball2);
+
+    // 4. Extended Wireframe Grid Shader — IDENTICAL geometry & shaders
+    const planeSize = 42;
+    const planeSegments = 120;
+
+    const planeVertexShader = `
+      precision mediump float;
+      uniform float uTime;
+      varying vec2 vUv;
+      varying vec2 vXZ;
+      varying float vElevation;
+
+      void main() {
+        vUv = uv;
+        vec3 pos = position;
+        vXZ = pos.xz;
+
+        float dist = length(pos.xz);
+        float angle = atan(pos.z, pos.x);
+
+        // Ripple wave
+        float wave = sin(dist * 2.5 - angle * 2.0 - uTime * 3.5) * exp(-dist * 0.22) * 0.55;
+        
+        pos.y = wave;
+        vElevation = wave;
+
+        gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
+      }
+    `;
+
+    const planeFragmentShader = `
+      precision mediump float;
+      uniform float uScreenHeight;
+      uniform float uScreenWidth;
+      uniform float uRefWidth;
+      uniform float uRefHeight;
+      varying vec2 vUv;
+      varying vec2 vXZ;
+      varying float vElevation;
+
+      float drawSquareGrid(vec2 uv, float gridDensity, float lineWidth) {
+        vec2 grid = abs(fract(uv * gridDensity - 0.5) - 0.5) / fwidth(uv * gridDensity);
+        float line = min(grid.x, grid.y);
+        return 1.0 - min(line * lineWidth, 1.0);
+      }
+
+      void main() {
+        float dist = length(vXZ);
+
+        // Keep the animation framing identical, but extend the grid only toward the left and bottom.
+        vec2 uv = vUv;
+        float leftExtend = 1.0 - smoothstep(0.48, 0.92, uv.x);
+        float bottomExtend = 1.0 - smoothstep(0.48, 0.92, uv.y);
+        uv.x -= 0.18 * leftExtend;
+        uv.y -= 0.18 * bottomExtend;
+
+        // Grid lines density scaled to match larger size
+        float gridLine = drawSquareGrid(uv, 66.0, 0.65);
+
+        // Radial fade extended 20% further outward (from 6.2 to 8.0)
+        float radialFade = 1.0 - smoothstep(1.0, 8.0, dist);
+
+        // Screen-space fade: grid fades to zero toward left edge and bottom edge
+        // In the original top-right region these evaluate to ~1.0, so no change there.
+        float bottomFade = smoothstep(0.0, uScreenHeight * 0.18, gl_FragCoord.y);
+        float leftFade   = smoothstep(0.0, uScreenWidth  * 0.15, gl_FragCoord.x);
+
+        // Combine all fade factors so lines dissolve smoothly at extended edges
+        float finalAlpha = radialFade * bottomFade * leftFade;
+
+        // Bright grid colors
+        vec3 crestColor = vec3(0.55, 0.95, 1.00); // Bright Electric Cyan
+        vec3 midColor   = vec3(0.12, 0.50, 0.85); // Vibrant Blue
+        vec3 troughColor= vec3(0.02, 0.18, 0.40); // Rich Deep Blue
+
+        // Color blending across wave elevations
+        vec3 gridColor = mix(troughColor, midColor, smoothstep(-0.3, 0.1, vElevation));
+        gridColor = mix(gridColor, crestColor, smoothstep(0.1, 0.45, vElevation));
+
+        // Brightness boost
+        gridColor *= 1.45;
+
+        if (gridLine < 0.05 || finalAlpha <= 0.001) discard;
+
+        gl_FragColor = vec4(gridColor, gridLine * finalAlpha * 0.95);
+      }
+    `;
+
+    const planeUniforms = {
+      uTime: { value: 0 },
+      uScreenHeight: { value: 1 },
+      uScreenWidth:  { value: 1 },
+      uRefWidth:     { value: REF_W },
+      uRefHeight:    { value: REF_H }
+    };
+
+    const planeGeo = new THREE.PlaneGeometry(planeSize, planeSize, planeSegments, planeSegments);
+    planeGeo.rotateX(-Math.PI * 0.32);
+
+    const planeMat = new THREE.ShaderMaterial({
+      vertexShader: planeVertexShader,
+      fragmentShader: planeFragmentShader,
+      uniforms: planeUniforms,
+      transparent: true,
+      depthWrite: false,
+      blending: THREE.AdditiveBlending
+    });
+
+    const gridMesh = new THREE.Mesh(planeGeo, planeMat);
+    mainGroup.add(gridMesh);
+
+    // Initial sizing
+    resizeRenderer();
+
+    // Animation Loop — IDENTICAL orbit math
+    const clock = new THREE.Clock();
+
+    function animate() {
+      requestAnimationFrame(animate);
+
+      const t = clock.getElapsedTime();
+      planeUniforms.uTime.value = t;
+
+      // Orbit math
+      const x = Math.cos(t * orbitSpeed) * orbitRadius;
+      const z = Math.sin(t * orbitSpeed) * orbitRadius;
+
+      ball1.position.set(x, 0.15, z);
+      ball2.position.set(-x, 0.15, -z);
+
+      renderer.render(scene, camera);
+    }
+
+    animate();
+
+    window.addEventListener('resize', () => {
+      resizeRenderer();
+    });
+
+  </script>
+</body>
+</html>
