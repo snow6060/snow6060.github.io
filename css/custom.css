@@ -217,6 +217,13 @@ body {
 /*======================================
 //--//-->   INTRO ANIMATION
 ======================================*/
+.typing-text, .cursor {
+    font-family: 'Unispace', 'Consolas', monospace;
+    font-size: 38.5px; /* 30% smaller than the 55px title */
+    line-height: 1;
+    vertical-align: middle;
+}
+
 .cursor {
     animation: blink 1s step-end infinite;
 }
@@ -225,21 +232,25 @@ body {
 }
 
 .enter-btn {
-    display: inline-block;
-    padding: 2px 10px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 38.5px; /* Exactly matches the line-height of the typing text */
+    box-sizing: border-box;
+    padding: 0 12px;
     margin-left: 15px;
     background: #333;
     border: 2px solid #555;
     border-radius: 6px;
     color: #fff;
-    font-size: 24px;
-    font-family: monospace;
-    box-shadow: 0 5px 0 #111;
+    font-size: 20px;
+    font-family: 'Unispace', 'Consolas', monospace;
+    box-shadow: 0 4px 0 #111;
     transition: transform 0.1s, box-shadow 0.1s;
-    vertical-align: text-bottom;
+    vertical-align: middle;
 }
 .enter-btn.pressed {
-    transform: translateY(5px);
+    transform: translateY(4px);
     box-shadow: 0 0px 0 #111;
 }
 

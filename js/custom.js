@@ -13,7 +13,7 @@ document.addEventListener("DOMContentLoaded", () => {
     
     const typingSpan = document.createElement("span");
     typingSpan.className = "typing-text";
-    typingSpan.style.color = "#ffbd39"; // make code pop
+    typingSpan.style.color = "#ffffff"; // make code white
     titleContainer.appendChild(typingSpan);
 
     const cursorSpan = document.createElement("span");
@@ -73,7 +73,7 @@ document.addEventListener("DOMContentLoaded", () => {
             const charSpan = document.createElement("span");
             charSpan.innerText = textToCrumble[i] === " " ? "\u00A0" : textToCrumble[i];
             charSpan.style.display = "inline-block";
-            charSpan.style.color = "#ffbd39";
+            charSpan.style.color = "#ffffff";
             typingSpan.appendChild(charSpan);
             pieces.push(charSpan);
         }
