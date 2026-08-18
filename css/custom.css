@@ -1,0 +1,214 @@
+/*======================================
+//--//-->   ABOUT
+======================================*/
+
+.about-mf .box-shadow-full {
+  padding-top: 4rem;
+  padding-bottom: 4rem;
+}
+
+.about-mf .about-img {
+  margin-bottom: 2rem;
+}
+
+.about-mf .about-img img {
+  margin-left: 10px;
+}
+
+
+.skill-mf .progress {
+  /* background-color: #cde1f8; */
+  margin: .5rem 0 1.2rem 0;
+  border-radius: 0;
+  height: .7rem;
+}
+
+.skill-mf .progress .progress-bar {
+  height: .7rem;
+  background-color: #ffbd39;
+}
+
+
+/* Animation styles */
+#typing-animation {
+  position: relative;
+  font-size: 30px;
+  font-weight: bold;
+  color: rgb(255, 255, 255);
+  overflow: hidden;
+  white-space: nowrap;
+  animation: typing 3s steps(20, end) infinite;
+}
+
+#typing-animation:before {
+  content: "";
+  /* position: absolute; */
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 100%;
+  background-color: #ccc;
+  animation: typing-cursor 0.5s ease-in-out infinite;
+}
+
+@keyframes typing {
+  from {
+    width: 0;
+  }
+  to {
+    width: 100%;
+  }
+}
+
+@keyframes typing-cursor {
+  from {
+    width: 5px;
+  }
+  to {
+    width: 0;
+  }
+}
+
+
+/* project image zoom effect */
+
+.zoom-effect {
+  overflow: hidden;
+  transition: transform 0.3s ease-out;
+}
+
+.zoom-effect:hover {
+  transform: scale(1.1);
+}
+
+
+/* Animation container - full screen, behind everything */
+#theme-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+/* All content sits on top */
+body {
+  background: #010408;
+}
+
+.site-content {
+  position: relative;
+  z-index: 1;
+}
+
+/*======================================
+//--//-->   HERO SECTION
+======================================*/
+#home-section {
+  display: flex;
+  align-items: center;
+  min-height: 100vh;
+  background: #010408;
+  padding: 0;
+  margin: 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-left-side {
+  flex: 1;
+  padding: 40px 60px;
+  z-index: 2;
+  color: #fff;
+  max-width: 50%;
+}
+
+.hero-nav {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+  margin-bottom: 60px;
+  flex-wrap: wrap;
+}
+
+.hero-nav a {
+  color: #fff;
+  text-decoration: none;
+}
+
+.hero-nav a.active {
+  color: #ffbd39;
+  font-weight: 600;
+}
+
+.hero-hello {
+  font-size: 18px;
+  color: #ffbd39;
+  letter-spacing: 2px;
+}
+
+.hero-title {
+  font-size: 60px;
+  font-weight: 700;
+  margin: 20px 0 10px 0;
+  color: #fff;
+}
+
+.hero-title span {
+  color: #ffbd39;
+}
+
+.hero-subtitle {
+  font-size: 24px;
+  color: #fff;
+  margin-bottom: 30px;
+}
+
+.hero-btn {
+  display: inline-block;
+  padding: 12px 30px;
+  background: #ffbd39;
+  color: #010408 !important;
+  font-weight: 600;
+  text-decoration: none;
+  border-radius: 30px;
+  transition: all 0.3s;
+  margin-bottom: 40px;
+}
+
+.hero-btn:hover {
+  background: #e6a82e;
+}
+
+.hero-picture-wrapper {
+  margin-top: 10px;
+}
+
+.hero-picture {
+  max-width: 300px;
+  height: auto;
+  border-radius: 15px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+
+.hero-right-side {
+  flex: 1;
+  height: 100vh;
+  position: relative;
+  overflow: hidden;
+  background: transparent;
+}
+
+.hero-iframe {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+  pointer-events: none;
+  background: transparent;
+}

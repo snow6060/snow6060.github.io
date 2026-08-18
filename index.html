@@ -24,224 +24,60 @@
 
 
 
-<style>
-
-/*======================================
-//--//-->   ABOUT
-======================================*/
-
-.about-mf .box-shadow-full {
-  padding-top: 4rem;
-  padding-bottom: 4rem;
-}
-
-.about-mf .about-img {
-  margin-bottom: 2rem;
-}
-
-.about-mf .about-img img {
-  margin-left: 10px;
-}
-
-
-.skill-mf .progress {
-  /* background-color: #cde1f8; */
-  margin: .5rem 0 1.2rem 0;
-  border-radius: 0;
-  height: .7rem;
-}
-
-.skill-mf .progress .progress-bar {
-  height: .7rem;
-  background-color: #ffbd39;
-}
-
-
-/* Animation styles */
-#typing-animation {
-  position: relative;
-  font-size: 30px;
-  font-weight: bold;
-  color: rgb(255, 255, 255);
-  overflow: hidden;
-  white-space: nowrap;
-  animation: typing 3s steps(20, end) infinite;
-}
-
-#typing-animation:before {
-  content: "";
-  /* position: absolute; */
-  top: 0;
-  left: 0;
-  width: 0;
-  height: 100%;
-  background-color: #ccc;
-  animation: typing-cursor 0.5s ease-in-out infinite;
-}
-
-@keyframes typing {
-  from {
-    width: 0;
-  }
-  to {
-    width: 100%;
-  }
-}
-
-@keyframes typing-cursor {
-  from {
-    width: 5px;
-  }
-  to {
-    width: 0;
-  }
-}
-
-
-/* project image zoom effect */
-
-.zoom-effect {
-  overflow: hidden;
-  transition: transform 0.3s ease-out;
-}
-
-.zoom-effect:hover {
-  transform: scale(1.1);
-}
-
-
-/* Animation container - full screen, behind everything */
-#theme-container {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  pointer-events: none;
-  z-index: 0;
-  overflow: hidden;
-}
-
-/* All content sits on top */
-body {
-  background: #010408;
-}
-
-.site-content {
-  position: relative;
-  z-index: 1;
-}
-
-</style>
+    <link rel="stylesheet" href="css/custom.css">
 
 
   </head>
   <body data-spy="scroll" data-target=".site-navbar-target" data-offset="300">
 	  
-    <!-- ===== ANIMATION AT THE TOP OF THE PAGE ===== -->
-    <div style="position: relative; width: 100%; height: 100vh; overflow: hidden; background: #010408;">
-      <iframe 
-        src="partials/animations/orbit_animation.html"
-        style="
-          position: absolute;
-          top: 0;
-          left: 0;
-          width: 100%;
-          height: 100%;
-          border: none;
-          pointer-events: none;
-          background: #010408;
-        "
-      ></iframe>
-    </div>
-
-    <!-- ===== YOUR PORTFOLIO CONTENT (starts after the animation) ===== -->
+    <!-- ===== YOUR PORTFOLIO CONTENT ===== -->
     <div class="site-content">
 	  
-    <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar ftco-navbar-light site-navbar-target" id="ftco-navbar">
-	    <div class="container">
-	      <a class="navbar-brand" href="index.html">Ruhama Tabassum</a>
-	      <button class="navbar-toggler js-fh5co-nav-toggle fh5co-nav-toggle" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
-	        <span class="oi oi-menu"></span> Menu
-	      </button>
+	<section id="home-section" class="hero">
 
-	      <div class="collapse navbar-collapse" id="ftco-nav">
-	        <ul class="navbar-nav nav ml-auto">
-	          <li class="nav-item"><a href="#home-section" class="nav-link"><span>Home</span></a></li>
-	          <li class="nav-item"><a href="#about-section" class="nav-link"><span>About</span></a></li>
-	          <li class="nav-item"><a href="#resume-section" class="nav-link"><span>Resume</span></a></li>
-	          <li class="nav-item"><a href="#project-section" class="nav-link"><span>Projects</span></a></li>
-	          <li class="nav-item"><a href="#contact-section" class="nav-link"><span>Contact</span></a></li>
-	        </ul>
+	  <!-- ===== LEFT SIDE: Content ===== -->
+	  <div class="hero-left-side">
+	    <!-- Navigation (Left-aligned) -->
+	    <nav class="hero-nav">
+	      <a href="#home-section" class="active">Home</a>
+	      <a href="#about-section">About</a>
+	      <a href="#resume-section">Resume</a>
+	      <a href="#project-section">Projects</a>
+	      <a href="#contact-section">Contact</a>
+	    </nav>
+
+	    <!-- Hero Text -->
+	    <div>
+	      <span class="hero-hello">HELLO!</span>
+	      <h1 class="hero-title">
+	        I'm <span>Inzamam-Ul-Haque</span>
+	      </h1>
+	      
+	      <!-- Typing Animation (Optional) -->
+	      <div style="font-size: 30px; font-weight: bold; color: #fff; margin-bottom: 10px;">
+	        <span id="typing-animation"></span>
+	      </div>
+	      
+	      <h2 class="hero-subtitle">A Product Manager</h2>
+	      
+	      <a href="#project-section" class="hero-btn">My Works</a>
+
+	      <!-- Picture of Me -->
+	      <div class="hero-picture-wrapper">
+	        <img src="images/my-picture.png" alt="Inzamam-Ul-Haque" class="hero-picture">
 	      </div>
 	    </div>
-	  </nav>
-	  <section id="home-section" class="hero">
-		  <div class="home-slider  owl-carousel">
-	       <div class="slider-item ">
-	      	<div class="overlay"></div>
-	         <div class="container">
-	          <div class="row d-md-flex no-gutters slider-text align-items-end justify-content-end" data-scrollax-parent="true">
-	          	<div class="one-third js-fullheight order-md-last img" style="background-image:url(images/bg_1.png);">
-	          	 <div class="overlay"></div>
-	          	</div>
-		          <div class="one-forth d-flex  align-items-center ftco-animate" data-scrollax=" properties: { translateY: '70%' }">
-		          	<div class="text">
-		          		<span class="subheading">Hello!</span>
-			            <h1 class="mb-4 mt-3">I'm <span>Ruhama Tabassum</span></h1>
+	  </div>
 
-						<!-- Element to contain animated typing -->
-						<span id="typing-animation"></span>
+	  <!-- ===== RIGHT SIDE: Animation (Top-Right) ===== -->
+	  <div class="hero-right-side">
+	    <iframe 
+	      src="partials/animations/orbit_animation.html"
+	      class="hero-iframe"
+	    ></iframe>
+	  </div>
 
-						<script>
-
-						// Initialize the typing animation
-						const typingAnimationElement = document.getElementById('typing-animation');
-
-						// Create an array of typing text
-						const typingTexts = [
-						'Product Manager  ',
-						'Data Enthusiast  ',
-						'Project Manager  ',
-						'Learner  ',
-						// 'Teacher   ',
-						];
-
-						// Create a function to display the typing animation for a given text
-						function playTypingAnimation(text) {
-						// Loop through each character and add it to the element
-						for (let i = 0; i < text.length; i++) {
-							setTimeout(() => {
-							typingAnimationElement.textContent += text[i];
-							}, i * 200); // Increase the delay to slow down the typing animation
-						}
-
-						// Once the animation is complete, reset the text and start over
-						setTimeout(() => {
-							typingAnimationElement.textContent = '';
-							playTypingAnimation(typingTexts[(typingTexts.indexOf(text) + 1) % typingTexts.length]);
-						}, text.length * 200);
-						}
-
-						// Start the typing animation loop
-						playTypingAnimation(typingTexts[0]);
-
-						</script>
-
-						<br>
-						<br>
-			            <h2>A Product Manager</h2>
-						<!-- <h2 class="d-flex" style="margin-bottom: 0">With over 5 years of experience</h2> -->
-						<!-- <br> -->
-			            <!-- <p><a href="https://www.youtube.com/@RishabhMishraOfficial" class="btn btn-primary py-3 px-4">YouTube</a>  -->
-							<a href="https://github.com/RuhamaTabassum" class="btn btn-primary py-3 px-5">My works</a></p>
-		            </div>
-		          </div>
-	        	</div>
-	        </div>
-	      </div>
-		</div>
-    </section>
+	</section>
 
 
 
