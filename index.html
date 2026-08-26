@@ -49,16 +49,17 @@
 	    <!-- Hero Text -->
 	    <div>
 	      <span class="hero-hello">HELLO!</span>
-	      <h1 class="hero-title" id="animated-hero-title">
-	        I'm <span>Inzamam-Ul-Haque</span>
-	      </h1>
-	      
-	      <!-- Typing Animation (Optional) -->
-	      <div style="font-size: 30px; font-weight: bold; color: #fff; margin-bottom: 10px;">
-	        <span id="typing-animation"></span>
+	      <!-- Fixed-height wrapper prevents layout shift while text animates -->
+	      <div class="hero-title-wrapper">
+	        <h1 class="hero-title" id="animated-hero-title">
+	          I'm <span>Inzamam-Ul-Haque</span>
+	        </h1>
 	      </div>
 	      
-	      <h2 class="hero-subtitle">A Product Manager</h2>
+	      <!-- Typing Animation — fixed-height wrapper prevents layout shift -->
+	      <div class="tagline-wrapper">
+	        <span id="typing-animation"></span>
+	      </div>
 	      
 	      <a href="#project-section" class="hero-btn">My Works</a>
 

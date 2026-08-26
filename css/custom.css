@@ -238,10 +238,30 @@ html {
   color: #ffbd39;
 }
 
-.hero-subtitle {
-  font-size: 24px;
+/* Fixed-height wrapper: reserves space equal to one line of hero-title
+   (55px font * ~1.2 line-height ≈ 66px) + top/bottom margins (20px+10px).
+   This stops surrounding content from reflowing as the h1 is replaced
+   by shorter text during the intro animation phases.               */
+.hero-title-wrapper {
+  min-height: 96px; /* 66px line + 30px margin = 96px */
+  display: block;
+}
+
+/* Fixed-height wrapper for the scrambling tagline (#typing-animation).
+   font-size: 30px, line-height: ~1.4 → rendered line ≈ 42px.
+   margin-bottom: 10px → total reserved: 52px.
+   The span inside is never display:none, so visibility:hidden is used
+   by the JS when empty; the block itself always holds its space.    */
+.tagline-wrapper {
+  min-height: 52px;       /* 30px * 1.4 lh + 10px mb */
+  display: block;
+  margin-bottom: 10px;
+  font-size: 30px;
+  font-weight: bold;
   color: #fff;
-  margin-bottom: 30px;
+  line-height: 1.4;
+  /* overflow: hidden keeps scramble characters from jutting outside */
+  overflow: hidden;
 }
 
 .hero-btn {
