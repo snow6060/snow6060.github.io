@@ -53,10 +53,52 @@ document.addEventListener("DOMContentLoaded", () => {
             enterBtn.classList.add("pressed");
             setTimeout(() => {
                 enterBtn.classList.remove("pressed");
+                triggerTerminalRevealSequence();
                 // Start crumble animation
                 setTimeout(startCrumble, 300);
             }, 150);
         }, 800);
+    }
+
+    function triggerTerminalRevealSequence() {
+        const terminalFrame = document.querySelector('.terminal-frame');
+        const photoWrap = document.querySelector('.photo-glitch-wrap');
+
+        if (!terminalFrame || !photoWrap) return;
+
+        photoWrap.querySelectorAll('.photo-tile').forEach(tile => tile.remove());
+
+        const columns = 18;
+        const rows = 14;
+        const width = photoWrap.clientWidth || 240;
+        const height = photoWrap.clientHeight || 290;
+        const tileWidth = width / columns;
+        const tileHeight = height / rows;
+
+        const fragment = document.createDocumentFragment();
+        for (let row = 0; row < rows; row++) {
+            for (let col = 0; col < columns; col++) {
+                const tile = document.createElement('span');
+                tile.className = 'photo-tile';
+                tile.style.width = `${tileWidth}px`;
+                tile.style.height = `${tileHeight}px`;
+                tile.style.left = `${col * tileWidth}px`;
+                tile.style.top = `${row * tileHeight}px`;
+                fragment.appendChild(tile);
+            }
+        }
+        photoWrap.appendChild(fragment);
+
+        terminalFrame.classList.remove('is-visible');
+        void terminalFrame.offsetWidth;
+        terminalFrame.classList.add('is-visible');
+
+        const tiles = Array.from(photoWrap.querySelectorAll('.photo-tile'));
+        tiles.forEach((tile, index) => {
+            setTimeout(() => {
+                tile.classList.add('is-cleared');
+            }, 50 + index * 11);
+        });
     }
 
     // 4. Earthquake / Crumble Animation
@@ -156,6 +198,12 @@ document.addEventListener("DOMContentLoaded", () => {
                 charSpan.innerText = text[i];
                 charSpan.className = "drop-char";
                 
+                // Tag the letter "a" in "Haque" for precise alignment later
+                // "Inzamam-Ul-Haque" -> index 12 is 'a'
+                if (isHighlight && text === "Inzamam-Ul-Haque" && i === 12) {
+                    charSpan.id = "anchor-letter";
+                }
+                
                 // Randomize animation properties
                 const delay = Math.random() * 0.4; // 0 to 0.4s delay
                 const duration = 0.6 + Math.random() * 0.4; // 0.6 to 1.0s duration
@@ -169,7 +217,59 @@ document.addEventListener("DOMContentLoaded", () => {
 
         titleContainer.appendChild(createDropSpans(finalWord1, false));
         titleContainer.appendChild(createDropSpans(finalWord2, true));
+
+        requestAnimationFrame(() => {
+            alignHeadingToTerminalFrame();
+        });
     }
+
+    function alignHeadingToTerminalFrame() {
+        const terminalFrame = document.querySelector('.terminal-frame');
+        if (!terminalFrame || !terminalFrame.classList.contains('is-visible')) {
+            titleContainer.style.letterSpacing = '';
+            return;
+        }
+        if (window.innerWidth <= 768) {
+            titleContainer.style.letterSpacing = '';
+            return;
+        }
+
+        const titleRect = titleContainer.getBoundingClientRect();
+        const terminalRect = terminalFrame.getBoundingClientRect();
+        const text = titleContainer.textContent || '';
+        if (!text.trim()) return;
+
+        const textLength = Array.from(text).length;
+        const currentRightEdge = titleRect.left + titleRect.width;
+        const requiredOffset = terminalRect.right - currentRightEdge;
+        const desiredLetterSpacing = requiredOffset / Math.max(textLength - 1, 1);
+
+        if (desiredLetterSpacing < -4 || desiredLetterSpacing > 8) {
+            console.warn('Hero heading spacing exceeded safe range; leaving normal letter spacing.');
+            titleContainer.style.letterSpacing = '';
+            return;
+        }
+
+        titleContainer.style.letterSpacing = `${desiredLetterSpacing}px`;
+    }
+
+    function scheduleHeadingAlignment() {
+        const doAlignment = () => {
+            if (document.fonts && document.fonts.ready) {
+                document.fonts.ready.then(alignHeadingToTerminalFrame);
+            } else {
+                alignHeadingToTerminalFrame();
+            }
+        };
+
+        doAlignment();
+        window.addEventListener('resize', () => {
+            clearTimeout(scheduleHeadingAlignment.resizeTimer);
+            scheduleHeadingAlignment.resizeTimer = setTimeout(doAlignment, 150);
+        });
+    }
+
+    scheduleHeadingAlignment();
     // ============================================================
     //  DECODE / SCRAMBLE REVEAL  —  #typing-animation
     // ============================================================
@@ -314,8 +414,79 @@ document.addEventListener("DOMContentLoaded", () => {
             });
         }
 
-        // Kick off after the hero-title intro animation has likely finished
-        // (intro takes ~4-5 s of typing + crumble + drop)
         cycleTimer = setTimeout(runCycle, 5500);
+    }
+
+    // ============================================================
+    //  TERMINAL FRAME PRECISE ALIGNMENT & GLITCH
+    // ============================================================
+    const terminalWrapper = document.querySelector('.hero-bottom-right');
+    const taglineWrapper = document.querySelector('.tagline-wrapper');
+    const homeSection = document.getElementById('home-section');
+
+    function alignTerminalFrame() {
+        if (!terminalWrapper || !taglineWrapper || !homeSection) return;
+
+        if (window.innerWidth <= 768) {
+            terminalWrapper.style.position = 'static';
+            terminalWrapper.style.left = 'auto';
+            terminalWrapper.style.top = 'auto';
+            return;
+        }
+
+        // Desktop: absolute positioning relative to #home-section
+        terminalWrapper.style.position = 'absolute';
+
+        const homeRect = homeSection.getBoundingClientRect();
+        const taglineRect = taglineWrapper.getBoundingClientRect();
+        
+        // Top alignment: perfectly aligned with the top of the tagline wrapper
+        const targetTop = taglineRect.top - homeRect.top;
+        
+        // Left alignment: Fixed static position relative to the left container edge 
+        // roughly matching the end of "I'm Inzamam-Ul-Haque" at desktop sizes
+        // No longer relying on dynamic text bounding boxes to prevent jumping!
+        // Padding is 60px on .hero-left-side, text width is ~500px, so ~560px is a solid fixed mark.
+        const targetLeft = 560;
+
+        terminalWrapper.style.top = `${targetTop}px`;
+        terminalWrapper.style.left = `${targetLeft}px`;
+    }
+
+    // Initial alignment
+    if (document.readyState === 'complete' || document.readyState === 'interactive') {
+        alignTerminalFrame();
+    } else {
+        window.addEventListener('DOMContentLoaded', alignTerminalFrame);
+    }
+    // Give it a tiny delay to ensure fonts are loaded
+    setTimeout(alignTerminalFrame, 100);
+
+    // Debounced resize listener
+    let resizeTimer;
+    window.addEventListener('resize', () => {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(alignTerminalFrame, 150);
+    });
+
+    // IntersectionObserver for terminal reveal replay on scroll re-entry
+    const photoGlitchWrap = document.querySelector('.photo-glitch-wrap');
+    if (photoGlitchWrap) {
+        let hasEnteredView = true;
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    if (!hasEnteredView) {
+                        hasEnteredView = true;
+                        triggerTerminalRevealSequence();
+                    }
+                } else {
+                    hasEnteredView = false;
+                }
+            });
+        }, { threshold: 0.1 });
+
+        observer.observe(photoGlitchWrap);
     }
 });
