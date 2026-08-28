@@ -1,4 +1,238 @@
 document.addEventListener("DOMContentLoaded", () => {
+    const matrixCanvas = document.getElementById('matrix-canvas');
+    if (matrixCanvas) {
+        const ctx = matrixCanvas.getContext('2d');
+        const heroSection = document.getElementById('home-section');
+
+        function resizeMatrixCanvas() {
+            if (!heroSection) return;
+            matrixCanvas.width = window.innerWidth;
+            matrixCanvas.height = heroSection.offsetHeight;
+            matrixCanvas.style.width = `${window.innerWidth}px`;
+            matrixCanvas.style.height = `${heroSection.offsetHeight}px`;
+            ctx.setTransform(1, 0, 0, 1, 0, 0);
+        }
+
+        const chars = '01ABCDEFabcdef0123456789';
+        const fontSize = 16;
+        let columns = 0;
+        let drops = [];
+
+        function initMatrix() {
+            const width = matrixCanvas.width || window.innerWidth;
+            const height = matrixCanvas.height || heroSection.offsetHeight;
+            columns = Math.floor(width / fontSize);
+            drops = Array(columns).fill(0);
+            ctx.clearRect(0, 0, width, height);
+        }
+
+        function drawMatrix() {
+            const width = matrixCanvas.width || window.innerWidth;
+            const height = matrixCanvas.height || heroSection.offsetHeight;
+            ctx.fillStyle = 'rgba(1, 4, 8, 0.12)';
+            ctx.fillRect(0, 0, width, height);
+
+            ctx.font = `${fontSize}px monospace`;
+            for (let i = 0; i < drops.length; i++) {
+                const text = chars[Math.floor(Math.random() * chars.length)];
+                const x = i * fontSize;
+                const y = drops[i] * fontSize;
+                ctx.fillStyle = '#F09527';
+                ctx.globalAlpha = 0.3;
+                ctx.fillText(text, x, y);
+                ctx.globalAlpha = 1;
+
+                if (y > height && Math.random() > 0.975) {
+                    drops[i] = 0;
+                }
+                drops[i]++;
+            }
+        }
+
+        resizeMatrixCanvas();
+        initMatrix();
+        window.addEventListener('resize', () => {
+            resizeMatrixCanvas();
+            initMatrix();
+        });
+        setInterval(drawMatrix, 80);
+    }
+
+    const orbitContainer = document.getElementById('theme-container');
+    if (orbitContainer && window.THREE) {
+        const REF_W = 520;
+        const REF_H = 220;
+        const REF_FOV = 48;
+        const REF_NEAR = 0.1;
+        const REF_FAR = 1000;
+        const halfH = REF_NEAR * Math.tan(THREE.MathUtils.degToRad(REF_FOV / 2));
+        const halfW = halfH * (REF_W / REF_H);
+
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(REF_FOV, REF_W / REF_H, REF_NEAR, REF_FAR);
+        camera.position.set(2.2, 5.8, 6.5);
+        camera.lookAt(0.2, -0.8, 0.0);
+
+        function updateProjection() {
+            const W = orbitContainer.clientWidth || REF_W;
+            const H = orbitContainer.clientHeight || REF_H;
+            const extraLeft = Math.max(0, W - REF_W);
+            const extraBottom = Math.max(0, H - REF_H);
+            const frustumPerPxH = (2 * halfH) / REF_H;
+            const frustumPerPxW = (2 * halfW) / REF_W;
+            const newLeft = -halfW - extraLeft * frustumPerPxW;
+            const newRight = halfW;
+            const newTop = halfH;
+            const newBottom = -halfH - extraBottom * frustumPerPxH;
+
+            camera.projectionMatrix.makePerspective(newLeft, newRight, newTop, newBottom, REF_NEAR, REF_FAR);
+            camera.projectionMatrixInverse.copy(camera.projectionMatrix).invert();
+        }
+
+        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+        function resizeRenderer() {
+            const W = orbitContainer.clientWidth || REF_W;
+            const H = orbitContainer.clientHeight || REF_H;
+            renderer.setSize(W, H);
+            updateProjection();
+            planeUniforms.uScreenHeight.value = H * (window.devicePixelRatio || 1);
+            planeUniforms.uScreenWidth.value = W * (window.devicePixelRatio || 1);
+        }
+
+        orbitContainer.appendChild(renderer.domElement);
+
+        const mainGroup = new THREE.Group();
+        mainGroup.position.set(1.85, 0.25, -0.6);
+        mainGroup.rotation.x = 0.22;
+        mainGroup.rotation.y = -Math.PI * 0.26;
+        mainGroup.rotation.z = 0.08;
+        scene.add(mainGroup);
+
+        const orbitRadius = 0.58;
+        const orbitSpeed = 2.2;
+        const sphereGeo = new THREE.SphereGeometry(0.30, 32, 32);
+        const sphereMat = new THREE.MeshBasicMaterial({ color: 0xffffff });
+        const ball1 = new THREE.Mesh(sphereGeo, sphereMat);
+        const ball2 = new THREE.Mesh(sphereGeo, sphereMat);
+
+        const glowGeo = new THREE.SphereGeometry(0.48, 32, 32);
+        const glowMat = new THREE.MeshBasicMaterial({
+            color: 0x66e5ff,
+            transparent: true,
+            opacity: 0.75,
+            blending: THREE.AdditiveBlending
+        });
+        ball1.add(new THREE.Mesh(glowGeo, glowMat));
+        ball2.add(new THREE.Mesh(glowGeo, glowMat));
+        mainGroup.add(ball1);
+        mainGroup.add(ball2);
+
+        const planeSize = 42;
+        const planeSegments = 120;
+        const planeVertexShader = `
+            precision mediump float;
+            uniform float uTime;
+            varying vec2 vUv;
+            varying vec2 vXZ;
+            varying float vElevation;
+
+            void main() {
+              vUv = uv;
+              vec3 pos = position;
+              vXZ = pos.xz;
+
+              float dist = length(pos.xz);
+              float angle = atan(pos.z, pos.x);
+              float wave = sin(dist * 2.5 - angle * 2.0 - uTime * 3.5) * exp(-dist * 0.22) * 0.55;
+              pos.y = wave;
+              vElevation = wave;
+              gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
+            }
+        `;
+
+        const planeFragmentShader = `
+            precision mediump float;
+            uniform float uScreenHeight;
+            uniform float uScreenWidth;
+            uniform float uRefWidth;
+            uniform float uRefHeight;
+            varying vec2 vUv;
+            varying vec2 vXZ;
+            varying float vElevation;
+
+            float drawSquareGrid(vec2 uv, float gridDensity, float lineWidth) {
+              vec2 grid = abs(fract(uv * gridDensity - 0.5) - 0.5) / fwidth(uv * gridDensity);
+              float line = min(grid.x, grid.y);
+              return 1.0 - min(line * lineWidth, 1.0);
+            }
+
+            void main() {
+              float dist = length(vXZ);
+              vec2 uv = vUv;
+              float leftExtend = 1.0 - smoothstep(0.48, 0.92, uv.x);
+              float bottomExtend = 1.0 - smoothstep(0.48, 0.92, uv.y);
+              uv.x -= 0.18 * leftExtend;
+              uv.y -= 0.18 * bottomExtend;
+
+              float gridLine = drawSquareGrid(uv, 66.0, 0.65);
+              float radialFade = 1.0 - smoothstep(1.0, 8.0, dist);
+              float bottomFade = smoothstep(0.0, uScreenHeight * 0.18, gl_FragCoord.y);
+              float leftFade = smoothstep(0.0, uScreenWidth * 0.15, gl_FragCoord.x);
+              float finalAlpha = radialFade * bottomFade * leftFade;
+
+              vec3 crestColor = vec3(0.55, 0.95, 1.00);
+              vec3 midColor = vec3(0.12, 0.50, 0.85);
+              vec3 troughColor = vec3(0.02, 0.18, 0.40);
+              vec3 gridColor = mix(troughColor, midColor, smoothstep(-0.3, 0.1, vElevation));
+              gridColor = mix(gridColor, crestColor, smoothstep(0.1, 0.45, vElevation));
+              gridColor *= 1.45;
+
+              if (gridLine < 0.05 || finalAlpha <= 0.001) discard;
+              gl_FragColor = vec4(gridColor, gridLine * finalAlpha * 0.95);
+            }
+        `;
+
+        const planeUniforms = {
+            uTime: { value: 0 },
+            uScreenHeight: { value: 1 },
+            uScreenWidth: { value: 1 },
+            uRefWidth: { value: REF_W },
+            uRefHeight: { value: REF_H }
+        };
+
+        const planeGeo = new THREE.PlaneGeometry(planeSize, planeSize, planeSegments, planeSegments);
+        planeGeo.rotateX(-Math.PI * 0.32);
+
+        const planeMat = new THREE.ShaderMaterial({
+            vertexShader: planeVertexShader,
+            fragmentShader: planeFragmentShader,
+            uniforms: planeUniforms,
+            transparent: true,
+            depthWrite: false,
+            blending: THREE.AdditiveBlending
+        });
+
+        const gridMesh = new THREE.Mesh(planeGeo, planeMat);
+        mainGroup.add(gridMesh);
+        resizeRenderer();
+
+        const clock = new THREE.Clock();
+        function animateOrbit() {
+            requestAnimationFrame(animateOrbit);
+            const t = clock.getElapsedTime();
+            planeUniforms.uTime.value = t;
+            const x = Math.cos(t * orbitSpeed) * orbitRadius;
+            const z = Math.sin(t * orbitSpeed) * orbitRadius;
+            ball1.position.set(x, 0.15, z);
+            ball2.position.set(-x, 0.15, -z);
+            renderer.render(scene, camera);
+        }
+        animateOrbit();
+        window.addEventListener('resize', resizeRenderer);
+    }
+
     // Select the hero title element (we will add the ID to it)
     const titleContainer = document.getElementById("animated-hero-title");
     if (!titleContainer) return;

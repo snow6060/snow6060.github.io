@@ -145,21 +145,33 @@
 }
 
 
-/* Animation container - full screen, behind everything */
-#theme-container {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  pointer-events: none;
-  z-index: 0;
-  overflow: hidden;
-}
-
 /* All content sits on top */
 body {
   background: #010408;
+  font-family: 'Unispace', 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+  color: #f5f7fa;
+}
+
+body,
+button,
+input,
+textarea,
+select,
+label,
+nav,
+section,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+li,
+a,
+span,
+div {
+  font-family: 'Unispace', 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
 }
 
 .site-content {
@@ -175,22 +187,71 @@ html {
 }
 
 #home-section {
-  display: flex;
-  align-items: flex-start; /* Aligns content to the top */
+  position: relative;
   min-height: 100vh;
-  background: #010408;
+  background: rgba(1, 4, 8, 0.85);
   padding: 0;
   margin: 0;
-  position: relative;
   overflow: hidden;
+  z-index: 0;
+}
+
+#matrix-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+  display: block;
+}
+
+#theme-container {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 450px;
+  height: 450px;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 1;
+}
+
+#theme-container canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.hero-left-side,
+.hero-right-side,
+.hero-nav,
+.hero-hello,
+.hero-title-wrapper,
+.hero-bottom-row,
+.hero-bottom-left,
+.hero-bottom-right,
+.terminal-frame,
+.hero-btn,
+.telemetry-widget,
+#animated-hero-title,
+.tagline-wrapper,
+.hero-picture,
+.hero-iframe {
+  position: relative;
+  z-index: 2;
 }
 
 .hero-left-side {
-  flex: 1;
-  padding: 40px 60px;
-  z-index: 2;
+  padding: 40px 0 40px 0;
   color: #fff;
-  max-width: 50%;
+  max-width: none;
+  width: auto;
+  flex: 1;
+  min-width: 0;
+  position: relative;
 }
 
 .hero-nav {
@@ -292,11 +353,14 @@ html {
 
 .hero-title {
   font-family: 'Unispace', monospace !important;
-  font-size: 55px; /* slightly smaller to help fit */
+  font-size: 55px;
   font-weight: 700;
   margin: 20px 0 10px 0;
   color: #fff;
-  white-space: nowrap; /* forces single line */
+  word-break: break-word;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  white-space: normal;
 }
 
 #animated-hero-title {
@@ -323,6 +387,7 @@ html {
    by the JS when empty; the block itself always holds its space.    */
 .tagline-wrapper {
   min-height: 52px;       /* 30px * 1.4 lh + 10px mb */
+  width: 100%;
   display: block;
   margin-bottom: 10px;
   font-size: 30px;
@@ -346,7 +411,7 @@ html {
   clip-path: polygon(8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%, 0 8px);
   box-shadow: inset 0 0 10px rgba(255, 189, 57, 0.2);
   transition: all 0.3s ease;
-  margin-bottom: 40px;
+  margin-bottom: 1.25rem;
   position: relative;
 }
 
@@ -355,6 +420,36 @@ html {
   box-shadow: inset 0 0 15px rgba(255, 189, 57, 0.6);
   text-shadow: 0 0 5px #ffbd39;
   animation: matrix-flicker 0.15s infinite alternate;
+}
+
+.telemetry-widget {
+  width: 360px;
+  max-width: 100%;
+  box-sizing: border-box;
+  flex-shrink: 0;
+  padding: 0.9rem 1rem 0.8rem;
+  background: rgba(10, 14, 18, 0.7);
+  border: 1px solid rgba(240, 149, 39, 0.4);
+  box-shadow: 0 0 18px rgba(240, 149, 39, 0.12);
+  color: #f2b75d;
+  font-family: 'Unispace', 'Consolas', monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  line-height: 1.6;
+}
+
+.telemetry-header {
+  color: #ffbd39;
+  margin-bottom: 0.35rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.telemetry-line {
+  font-size: 0.72rem;
+  color: rgba(255, 189, 57, 0.9);
+  white-space: normal;
+  word-break: break-word;
 }
 
 @keyframes matrix-flicker {
@@ -375,14 +470,27 @@ html {
    ================================== */
 .hero-bottom-row {
   display: flex;
-  align-items: center;
-  gap: 40px;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+  position: relative;
 }
 
 .hero-bottom-left {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  justify-content: flex-start;
+  min-width: 0;
+}
+
+.hero-bottom-right {
+  position: absolute;
+  bottom: 0;
+  right: -280px;
+  width: auto;
+  display: flex;
+  align-items: flex-end;
 }
 
 /* ==================================
@@ -398,8 +506,8 @@ html {
   display: flex;
   flex-direction: column;
   flex-shrink: 0;
-  visibility: hidden;
-  opacity: 0;
+  visibility: visible;
+  opacity: 1;
   transition: opacity 0.2s ease;
 }
 
@@ -494,11 +602,7 @@ html {
 }
 
 .hero-right-side {
-  flex: 1;
-  height: 100vh;
-  position: relative;
-  overflow: hidden;
-  background: transparent;
+  display: none;
 }
 
 .hero-iframe {

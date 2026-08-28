@@ -7,7 +7,6 @@
     
     <link href="https://fonts.googleapis.com/css?family=Poppins:100,200,300,400,500,600,700,800,900" rel="stylesheet">
 
-    <link rel="stylesheet" href="css/open-iconic-bootstrap.min.css">
     <link rel="stylesheet" href="css/animate.css">
     
     <link rel="stylesheet" href="css/owl.carousel.min.css">
@@ -15,13 +14,8 @@
     <link rel="stylesheet" href="css/magnific-popup.css">
 
     <link rel="stylesheet" href="css/aos.css">
-
-    <link rel="stylesheet" href="css/ionicons.min.css">
-    
-    <link rel="stylesheet" href="css/flaticon.css">
-    <link rel="stylesheet" href="css/icomoon.css">
     <link rel="stylesheet" href="css/style.css">
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 
 
     <link rel="stylesheet" href="css/custom.css">
@@ -34,385 +28,213 @@
     <div class="site-content">
 	  
 	<section id="home-section" class="hero">
+	  <canvas id="matrix-canvas" aria-hidden="true"></canvas>
 
-	  <!-- ===== LEFT SIDE: Content ===== -->
-	  <div class="hero-left-side">
-	    <!-- Navigation (Left-aligned) -->
-	    <nav class="hero-nav">
-	      <a href="#home-section" class="active">Home</a>
-	      <a href="#about-section">About</a>
-	      <a href="#resume-section">Resume</a>
-	      <a href="#project-section">Projects</a>
-	      <a href="#contact-section">Contact</a>
-	    </nav>
+	  <div class="container h-100">
+	    <div class="row align-items-center h-100">
+	      <div class="col-lg-8 hero-left-side">
+	        <nav class="hero-nav">
+	          <a href="#home-section" class="active">Home</a>
+	          <a href="#about-section">About</a>
+	          <a href="#resume-section">Resume</a>
+	          <a href="#project-section">Projects</a>
+	          <a href="#contact-section">Contact</a>
+	        </nav>
 
-	    <!-- Hero Text -->
-	    <div>
-	      <span class="hero-hello">HELLO!</span>
-	      <!-- Fixed-height wrapper prevents layout shift while text animates -->
-	      <div class="hero-title-wrapper">
-	        <h1 class="hero-title" id="animated-hero-title">
-	          I'm <span>Inzamam-Ul-Haque</span>
-	        </h1>
-	      </div>
-
-	      <div class="hero-bottom-row">
-	        <div class="hero-bottom-left">
-	          <div class="tagline-wrapper">
-	            <span id="typing-animation"></span>
+	        <div>
+	          <span class="hero-hello">HELLO!</span>
+	          <div class="hero-title-wrapper">
+	            <h1 class="hero-title" id="animated-hero-title">
+	              I'm <span>Inzamam-Ul-Haque</span>
+	            </h1>
 	          </div>
 
-	          <a href="https://github.com/snow6060" class="hero-btn">&gt; Enter Repo</a>
-	        </div>
-
-	        <div class="hero-bottom-right">
-	          <div class="terminal-frame">
-	            <div class="terminal-header">
-	              <div class="terminal-dots">
-	                <span class="dot red"></span>
-	                <span class="dot amber"></span>
-	                <span class="dot green"></span>
+	          <div class="hero-bottom-row">
+	            <div class="hero-bottom-left">
+	              <div class="tagline-wrapper">
+	                <span id="typing-animation"></span>
 	              </div>
 
-	              <div class="terminal-title">profile.jpg</div>
+	              <a href="https://github.com/snow6060" class="hero-btn">&gt; Enter Repo</a>
+
+	              <div class="telemetry-widget" aria-label="system telemetry">
+	                <div class="telemetry-header">[ SYSTEM TELEMETRY ]</div>
+	                <div class="telemetry-line">&gt; STATUS: OPEN_TO_WORK</div>
+                <div class="telemetry-line">&gt; LOCATION: DHAKA, BANGLADESH</div>
+                <div class="telemetry-line">&gt; CORE_STACK: [PYTHON, REACT, PYTORCH, FASTAPI, DOCKER, NODE.JS, GOLANG]</div>
+                <div class="telemetry-line">&gt; EXPERIENCE: 3+ YEARS</div>
+                <div class="telemetry-line">&gt; RESEARCH PAPERS: 4</div>
+	              </div>
 	            </div>
 
-	            <div class="terminal-body">
-	              <div class="photo-glitch-wrap">
-	                <img src="images/my-picture.png" alt="Inzamam-Ul-Haque" class="hero-picture base">
+	            <div class="hero-bottom-right">
+	              <div class="terminal-frame">
+	                <div class="terminal-header">
+	                  <div class="terminal-dots">
+	                    <span class="dot red"></span>
+	                    <span class="dot amber"></span>
+	                    <span class="dot green"></span>
+	                  </div>
+
+	                  <div class="terminal-title">profile.jpg</div>
+	                </div>
+
+	                <div class="terminal-body">
+	                  <div class="photo-glitch-wrap">
+	                    <img src="images/my-picture.png" alt="Inzamam-Ul-Haque" class="hero-picture base">
+	                  </div>
+	                </div>
 	              </div>
 	            </div>
 	          </div>
 	        </div>
 	      </div>
+
 	    </div>
 	  </div>
-
-	  <div class="hero-right-side">
-	    <iframe
-	      src="partials/animations/orbit_animation.html"
-	      class="hero-iframe"
-	    ></iframe>
-	  </div>
-
+	  <!-- Orbit animation - absolutely positioned top-right, outside layout flow -->
+	  <div id="theme-container" aria-hidden="true"></div>
 	</section>
-
-<!-- Accidental duplicate About markup from the previous edit begins here.
-                                  <div class="about-info">
-													<p><span class="title-s">Name: </span> <span>Inzamam-Ul-Haque</span></p>
-													<p><span class="title-s">Status: </span> <span>Employed, Open to Opportunities</span></p>
-													<p><span class="title-s">Experience: </span> <span>3+ Years</span></p>
-													<p><span class="title-s">Address: </span> <span>Dhaka, Bangladesh</span></p>
-												  </div>
-												</div>
-
-												<div class="skill-tag-grid">
-													<div class="skill-tag-group" data-aos="fade-up" data-aos-delay="0">
-														<h4>Languages</h4>
-														<div class="skill-tag-list">
-															<span class="skill-tag">Python</span>
-															<span class="skill-tag">R (RStudio)</span>
-															<span class="skill-tag">C++</span>
-															<span class="skill-tag">SQL</span>
-															<span class="skill-tag">TypeScript</span>
-															<span class="skill-tag">JavaScript</span>
-														</div>
-													</div>
-													<div class="skill-tag-group" data-aos="fade-up" data-aos-delay="80">
-														<h4>Data Science / ML</h4>
-														<div class="skill-tag-list">
-															<span class="skill-tag">EDA</span>
-															<span class="skill-tag">Feature Engineering</span>
-															<span class="skill-tag">Statistical Analysis</span>
-															<span class="skill-tag">CNNs</span>
-															<span class="skill-tag">Object Detection</span>
-															<span class="skill-tag">Computer Vision</span>
-														</div>
-													</div>
-													<div class="skill-tag-group" data-aos="fade-up" data-aos-delay="160">
-														<h4>ML Frameworks</h4>
-														<div class="skill-tag-list">
-															<span class="skill-tag">PyTorch</span>
-															<span class="skill-tag">ResNet50</span>
-															<span class="skill-tag">YOLOv8</span>
-															<span class="skill-tag">Scikit-learn</span>
-														</div>
-													</div>
-													<div class="skill-tag-group" data-aos="fade-up" data-aos-delay="240">
-														<h4>MLOps &amp; DevOps</h4>
-														<div class="skill-tag-list">
-															<span class="skill-tag">Dagger</span>
-															<span class="skill-tag">DVC</span>
-															<span class="skill-tag">GitHub Actions</span>
-															<span class="skill-tag">CI/CD Pipelines</span>
-															<span class="skill-tag">Docker</span>
-															<span class="skill-tag">Git and GitHub</span>
-														</div>
-													</div>
-													<div class="skill-tag-group" data-aos="fade-up" data-aos-delay="320">
-														<h4>Web Development</h4>
-														<div class="skill-tag-list">
-															<span class="skill-tag">React 18</span>
-															<span class="skill-tag">Vite</span>
-															<span class="skill-tag">Tailwind CSS</span>
-															<span class="skill-tag">shadcn/ui</span>
-															<span class="skill-tag">Framer Motion</span>
-															<span class="skill-tag">TanStack Query</span>
-														</div>
-													</div>
-													<div class="skill-tag-group" data-aos="fade-up" data-aos-delay="400">
-														<h4>Backend / DB</h4>
-														<div class="skill-tag-list">
-															<span class="skill-tag">Node.js</span>
-															<span class="skill-tag">Express.js</span>
-															<span class="skill-tag">FastAPI</span>
-															<span class="skill-tag">PostgreSQL</span>
-															<span class="skill-tag">Supabase</span>
-															<span class="skill-tag">Drizzle ORM</span>
-														</div>
-													</div>
-													<div class="skill-tag-group" data-aos="fade-up" data-aos-delay="480">
-														<h4>Deployment</h4>
-														<div class="skill-tag-list">
-															<span class="skill-tag">Vercel</span>
-															<span class="skill-tag">Netlify</span>
-															<span class="skill-tag">Docker</span>
-															<span class="skill-tag">GitHub Actions Artifacts</span>
-														</div>
-													</div>
-													<div class="skill-tag-group" data-aos="fade-up" data-aos-delay="560">
-														<h4>Visualization</h4>
-														<div class="skill-tag-list">
-															<span class="skill-tag">Analytical Dashboards</span>
-															<span class="skill-tag">Data Visualisation Principles</span>
-															<span class="skill-tag">Figma</span>
-															<span class="skill-tag">DaVinci Resolve</span>
-														</div>
-													</div>
-													<div class="skill-tag-group" data-aos="fade-up" data-aos-delay="640">
-														<h4>AI Dev Tooling</h4>
-														<div class="skill-tag-list">
-															<span class="skill-tag">Claude (Anthropic)</span>
-															<span class="skill-tag">DeepSeek</span>
-															<span class="skill-tag">Cline</span>
-														</div>
-													</div>
-												</div>
-	</section> -->
-
-
 
     <section class="ftco-about img ftco-section ftco-no-pb" id="about-section">
     	<div class="container">
-			<div class="row">
-				<div class="row d-flex align-items-stretch">
-				<!-- <div class="row d-flex"> -->
-					<div class="col-md-6 col-lg-5 d-flex">
-						<div class="img-about img d-flex align-items-stretch">
-							<div class="overlay">
-								<div class="row">
-									<div class="col-sm-6 col-md-5">
-									  <div class="about-img">
-										<img src="images/about-me.png" class="img-fluid rounded b-shadow-a" alt="">
-									  </div>
-									</div>
-									<!-- Details next to profile image -->
-									<div class="col-sm-6 col-md-7">
-										<div class="about-info">
-											<p><span class="title-s">Name: </span> <span>Inzamam-Ul-Haque</span></p>
-											<p><span class="title-s">Status: </span> <span>Employed, Open to Opportunities</span></p>
-											<p><span class="title-s">Experience: </span> <span>3+ Years</span></p>
-											<p><span class="title-s">Address: </span> <span>Dhaka, Bangladesh</span></p>
-										</div>
-									</div>
+			<div class="row d-flex align-items-stretch">
+				<div class="col-md-6 col-lg-5 d-flex">
+					<div class="img-about img d-flex align-items-stretch">
+						<div class="overlay">
+							<div class="row">
+								<div class="col-sm-6 col-md-5">
+								  <div class="about-img">
+									<img src="images/about-me.png" class="img-fluid rounded b-shadow-a" alt="">
+								  </div>
 								</div>
-
-								<div class="skill-tag-grid">
-									<div class="skill-tag-group" data-aos="fade-up" data-aos-delay="0">
-										<h4>Languages</h4>
-										<div class="skill-tag-list">
-											<span class="skill-tag">Python</span>
-											<span class="skill-tag">R (RStudio)</span>
-											<span class="skill-tag">C++</span>
-											<span class="skill-tag">SQL</span>
-											<span class="skill-tag">TypeScript</span>
-											<span class="skill-tag">JavaScript</span>
-										</div>
-									</div>
-									<div class="skill-tag-group" data-aos="fade-up" data-aos-delay="80">
-										<h4>Data Science / ML</h4>
-										<div class="skill-tag-list">
-											<span class="skill-tag">EDA</span>
-											<span class="skill-tag">Feature Engineering</span>
-											<span class="skill-tag">Statistical Analysis</span>
-											<span class="skill-tag">CNNs</span>
-											<span class="skill-tag">Object Detection</span>
-											<span class="skill-tag">Computer Vision</span>
-										</div>
-									</div>
-									<div class="skill-tag-group" data-aos="fade-up" data-aos-delay="160">
-										<h4>ML Frameworks</h4>
-										<div class="skill-tag-list">
-											<span class="skill-tag">PyTorch</span>
-											<span class="skill-tag">ResNet50</span>
-											<span class="skill-tag">YOLOv8</span>
-											<span class="skill-tag">Scikit-learn</span>
-										</div>
-									</div>
-									<div class="skill-tag-group" data-aos="fade-up" data-aos-delay="240">
-										<h4>MLOps &amp; DevOps</h4>
-										<div class="skill-tag-list">
-											<span class="skill-tag">Dagger</span>
-											<span class="skill-tag">DVC</span>
-											<span class="skill-tag">GitHub Actions</span>
-											<span class="skill-tag">CI/CD Pipelines</span>
-											<span class="skill-tag">Docker</span>
-											<span class="skill-tag">Git and GitHub</span>
-										</div>
-									</div>
-									<div class="skill-tag-group" data-aos="fade-up" data-aos-delay="320">
-										<h4>Web Development</h4>
-										<div class="skill-tag-list">
-											<span class="skill-tag">React 18</span>
-											<span class="skill-tag">Vite</span>
-											<span class="skill-tag">Tailwind CSS</span>
-											<span class="skill-tag">shadcn/ui</span>
-											<span class="skill-tag">Framer Motion</span>
-											<span class="skill-tag">TanStack Query</span>
-										</div>
-									</div>
-									<div class="skill-tag-group" data-aos="fade-up" data-aos-delay="400">
-										<h4>Backend / DB</h4>
-										<div class="skill-tag-list">
-											<span class="skill-tag">Node.js</span>
-											<span class="skill-tag">Express.js</span>
-											<span class="skill-tag">FastAPI</span>
-											<span class="skill-tag">PostgreSQL</span>
-											<span class="skill-tag">Supabase</span>
-											<span class="skill-tag">Drizzle ORM</span>
-										</div>
-									</div>
-									<div class="skill-tag-group" data-aos="fade-up" data-aos-delay="480">
-										<h4>Deployment</h4>
-										<div class="skill-tag-list">
-											<span class="skill-tag">Vercel</span>
-											<span class="skill-tag">Netlify</span>
-											<span class="skill-tag">Docker</span>
-											<span class="skill-tag">GitHub Actions Artifacts</span>
-										</div>
-									</div>
-									<div class="skill-tag-group" data-aos="fade-up" data-aos-delay="560">
-										<h4>Visualization</h4>
-										<div class="skill-tag-list">
-											<span class="skill-tag">Analytical Dashboards</span>
-											<span class="skill-tag">Data Visualisation Principles</span>
-											<span class="skill-tag">Figma</span>
-											<span class="skill-tag">DaVinci Resolve</span>
-										</div>
-									</div>
-									<div class="skill-tag-group" data-aos="fade-up" data-aos-delay="640">
-										<h4>AI Dev Tooling</h4>
-										<div class="skill-tag-list">
-											<span class="skill-tag">Claude (Anthropic)</span>
-											<span class="skill-tag">DeepSeek</span>
-											<span class="skill-tag">Cline</span>
-										</div>
+								<div class="col-sm-6 col-md-7">
+									<div class="about-info">
+										<p><span class="title-s">Name: </span> <span>Inzamam-Ul-Haque</span></p>
+										<p><span class="title-s">Status: </span> <span>Employed, Open to Opportunities</span></p>
+										<p><span class="title-s">Experience: </span> <span>3+ Years</span></p>
+										<p><span class="title-s">Address: </span> <span>Dhaka, Bangladesh</span></p>
 									</div>
 								</div>
 							</div>
-						</div>
-					</div>
-					
-					<div class="col-md-6 col-lg-7 pl-lg-5 pb-5">
-						<div class="row justify-content-start pb-3">
-							<div class="col-md-12 heading-section ftco-animate">
-								
-								<h1 class="big">About</h1>
-								<h2 class="mb-4">About Me</h2>
-								
-																<p>'New vantage point, new perspective' — that's stuck with me since I grew up in a small town, spent a decade in Dhaka, and had a brief stint in Khulna during university. Three years in Copenhagen studying data science, working part-time the whole way through, added another lens. Different cities, different people, different ways of framing a problem — it adds up to a way of seeing things I couldn't have gotten by staying in one place. Off the clock, I'm a lifelong PC gamer — possibly the one problem I've never tried to optimize away. I don't believe in unsolvable problems, just ones I haven't found the right approach to yet. Aim for the moon — miss, and you're still among the stars.</p>
-																<ul class="about-info mt-4 px-md-0 px-2">
-																	<li class="d-flex"><span>Profile:</span> <span>Data Science, Machine Learning, Full-Stack Development</span></li>
-																	<li class="d-flex"><span>Domain:</span> <span>Computer Vision, MLOps, Architecture Tech</span></li>
-																	<li class="d-flex"><span>Education:</span> <span>BSc Data Science (ITU Copenhagen), BSc CSE (AUST)</span></li>
-																	<li class="d-flex"><span>Language:</span> <span>English, Bangla, Danish (basic)</span></li>
-																</ul>
-							</div>
-						</div>
 
-
-						<div class="counter-wrap ftco-animate d-flex mt-md-3">
-							<div class="text">
-												<p class="mb-4">
-													<span class="number" data-number="5">0</span> <span>+</span>
-													<span>&nbsp; Projects completed</span>
-												</p>
-												<p><a href="https://www.linkedin.com/in/inzamam-ul-haque-927b99183" class="btn btn-primary py-3 px-3">LinkedIn</a></p>
+							<div class="skill-tag-grid">
+								<div class="skill-tag-group" data-aos="fade-up" data-aos-delay="0">
+									<h4>Languages</h4>
+									<div class="skill-tag-list">
+										<span class="skill-tag">Python</span>
+										<span class="skill-tag">R (RStudio)</span>
+										<span class="skill-tag">C++</span>
+										<span class="skill-tag">SQL</span>
+										<span class="skill-tag">TypeScript</span>
+										<span class="skill-tag">JavaScript</span>
+									</div>
+								</div>
+								<div class="skill-tag-group" data-aos="fade-up" data-aos-delay="80">
+									<h4>Data Science / ML</h4>
+									<div class="skill-tag-list">
+										<span class="skill-tag">EDA</span>
+										<span class="skill-tag">Feature Engineering</span>
+										<span class="skill-tag">Statistical Analysis</span>
+										<span class="skill-tag">CNNs</span>
+										<span class="skill-tag">Object Detection</span>
+										<span class="skill-tag">Computer Vision</span>
+									</div>
+								</div>
+								<div class="skill-tag-group" data-aos="fade-up" data-aos-delay="160">
+									<h4>ML Frameworks</h4>
+									<div class="skill-tag-list">
+										<span class="skill-tag">PyTorch</span>
+										<span class="skill-tag">ResNet50</span>
+										<span class="skill-tag">YOLOv8</span>
+										<span class="skill-tag">Scikit-learn</span>
+									</div>
+								</div>
+								<div class="skill-tag-group" data-aos="fade-up" data-aos-delay="240">
+									<h4>MLOps &amp; DevOps</h4>
+									<div class="skill-tag-list">
+										<span class="skill-tag">Dagger</span>
+										<span class="skill-tag">DVC</span>
+										<span class="skill-tag">GitHub Actions</span>
+										<span class="skill-tag">CI/CD Pipelines</span>
+										<span class="skill-tag">Docker</span>
+										<span class="skill-tag">Git and GitHub</span>
+									</div>
+								</div>
+								<div class="skill-tag-group" data-aos="fade-up" data-aos-delay="320">
+									<h4>Web Development</h4>
+									<div class="skill-tag-list">
+										<span class="skill-tag">React 18</span>
+										<span class="skill-tag">Vite</span>
+										<span class="skill-tag">Tailwind CSS</span>
+										<span class="skill-tag">shadcn/ui</span>
+										<span class="skill-tag">Framer Motion</span>
+										<span class="skill-tag">TanStack Query</span>
+									</div>
+								</div>
+								<div class="skill-tag-group" data-aos="fade-up" data-aos-delay="400">
+									<h4>Backend / DB</h4>
+									<div class="skill-tag-list">
+										<span class="skill-tag">Node.js</span>
+										<span class="skill-tag">Express.js</span>
+										<span class="skill-tag">FastAPI</span>
+										<span class="skill-tag">PostgreSQL</span>
+										<span class="skill-tag">Supabase</span>
+										<span class="skill-tag">Drizzle ORM</span>
+									</div>
+								</div>
+								<div class="skill-tag-group" data-aos="fade-up" data-aos-delay="480">
+									<h4>Deployment</h4>
+									<div class="skill-tag-list">
+										<span class="skill-tag">Vercel</span>
+										<span class="skill-tag">Netlify</span>
+										<span class="skill-tag">Docker</span>
+										<span class="skill-tag">GitHub Actions Artifacts</span>
+									</div>
+								</div>
+								<div class="skill-tag-group" data-aos="fade-up" data-aos-delay="560">
+									<h4>Visualization</h4>
+									<div class="skill-tag-list">
+										<span class="skill-tag">Analytical Dashboards</span>
+										<span class="skill-tag">Data Visualisation Principles</span>
+										<span class="skill-tag">Figma</span>
+										<span class="skill-tag">DaVinci Resolve</span>
+									</div>
+								</div>
+								<div class="skill-tag-group" data-aos="fade-up" data-aos-delay="640">
+									<h4>AI Dev Tooling</h4>
+									<div class="skill-tag-list">
+										<span class="skill-tag">Claude (Anthropic)</span>
+										<span class="skill-tag">DeepSeek</span>
+										<span class="skill-tag">Cline</span>
+									</div>
+								</div>
 							</div>
 						</div>
 					</div>
 				</div>
-			</div>
-		</div>
-    </section>
-
-
-
-	
-    <section class="ftco-section ftco-no-pb" id="resume-section">
-    	<div class="container">
-    		<div class="row justify-content-center pb-5">
-          <div class="col-md-10 heading-section text-center ftco-animate">
-          	<h1 class="big big-2">Resume</h1>
-            <h2 class="mb-4">Resume</h2>
-            <p> Contributing my knowledge to the growth of the company with a deep sense of responsibility, integrity and professionalism 
-				and acquire further development to enhance my ability. </p>
-          </div>
-        </div>
-
-		<div class="row">
-			<h1 class="big-4">Experience</h1>
-			<div class="underline"></div>
-		</div>
-		<br>
-		
-		<div class="row">
-				<div class="col-md-6">
-					<div class="resume-wrap ftco-animate">
-						<span class="date">Business Development Manager</span>
-						<!-- <h2>CIMPATICO STUDIOS, (San Francisco)</h2> -->
-						<h2>Cimpatico Studios <span style="font-size: small;">(San Francisco)</span></h2>
-						<span class="position">2020-2022</span>
-						<!-- <span class="mt-4">San Francisco</span> -->
-						<p class="mt-4">A San Francisco based Collective Impact Television company 
-							producing live-stream talk shows on global challenges with experts worldwide. 
-							<ul>
-								<li>Actively contributed to the development of the Cimpatico Cloud Studio "TV-as-a-Service" platform.</li>
-								<li>Collaborated with the UI/UX design team to enhance the product interface with my insights, and identified bugs throughout the development process.</li>
-								<li>Developed a robust KPI dashboard and strategic plans, leveraging data analysis to track progress, set annual and quarterly goals.</li>
-								
+				<div class="col-md-6 col-lg-7 pl-lg-5 pb-5">
+					<div class="row justify-content-start pb-3">
+						<div class="col-md-12 heading-section ftco-animate">
+							<h1 class="big">About</h1>
+							<h2 class="mb-4">About Me</h2>
+							<p>'New vantage point, new perspective' — that's stuck with me since I grew up in a small town, spent a decade in Dhaka, and had a brief stint in Khulna during university. Three years in Copenhagen studying data science, working part-time the whole way through, added another lens. Different cities, different people, different ways of framing a problem — it adds up to a way of seeing things I couldn't have gotten by staying in one place. Off the clock, I'm a lifelong PC gamer — possibly the one problem I've never tried to optimize away. I don't believe in unsolvable problems, just ones I haven't found the right approach to yet. Aim for the moon — miss, and you're still among the stars.</p>
+							<ul class="about-info mt-4 px-md-0 px-2">
+								<li class="d-flex"><span>Profile:</span> <span>Data Science, Machine Learning, Full-Stack Development</span></li>
+								<li class="d-flex"><span>Domain:</span> <span>Computer Vision, MLOps, Architecture Tech</span></li>
+								<li class="d-flex"><span>Education:</span> <span>BSc Data Science (ITU Copenhagen), BSc CSE (AUST)</span></li>
+								<li class="d-flex"><span>Language:</span> <span>English, Bangla, Danish (basic)</span></li>
 							</ul>
-						</p>
+						</div>
 					</div>
 
-				</div>
-
-				<div class="col-md-6">
-					<div class="resume-wrap ftco-animate">
-						<span class="date">Supply Chain Apprentice</span>
-						<h2>Arla Foods <span style="font-size: small;">(Dhaka)</span></h2>
-						<span class="position">2019</span>
-						<!-- <span class="mt-4">San Francisco</span> -->
-						<p class="mt-4">A globally recognized multinational company with a focus on dairy, headquartered in Denmark and operating in over 30 countries.
-							<ul>
-								<li>Proficiently conducted data analysis, contributing to informed decision-making processes.</li>
-								<li>Skillfully managed database operations and prepare impactful PowerPoint presentations</li>
-								<li>Demonstrated versatility by undertaking diverse tasks, including project documentation, distribution network analysis, meeting minute preparation, and activities assigned by project, supply chain, and HR heads.
-
-
-
-
-								</li>
+					<div class="counter-wrap ftco-animate d-flex mt-md-3">
+						<div class="text">
+							<p class="mb-4">
+								<span class="number" data-number="5">0</span> <span>+</span>
+								<span>&nbsp; Projects completed</span>
+							</p>
+							<p><a href="https://www.linkedin.com/in/inzamam-ul-haque-927b99183" class="btn btn-primary py-3 px-3">LinkedIn</a></p>
 							</ul>
 						</p>
 					</div>
