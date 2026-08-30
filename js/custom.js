@@ -724,3 +724,40 @@ document.addEventListener("DOMContentLoaded", () => {
         observer.observe(photoGlitchWrap);
     }
 });
+
+(function initPaperCards() {
+    const setup = () => {
+        const paperCards = document.querySelectorAll('.paper-card');
+        paperCards.forEach((card) => {
+            const toggle = card.querySelector('.paper-card-toggle');
+            const body = card.querySelector('.paper-card-body');
+            const inner = card.querySelector('.paper-card-body-inner');
+            if (!toggle || !body || !inner || toggle.dataset.paperBound === '1') return;
+            toggle.dataset.paperBound = '1';
+
+            const setOpen = (open) => {
+                card.classList.toggle('is-open', open);
+                toggle.setAttribute('aria-expanded', String(open));
+                body.style.maxHeight = open ? `${inner.scrollHeight}px` : '0px';
+            };
+
+            toggle.addEventListener('click', () => {
+                setOpen(!card.classList.contains('is-open'));
+            });
+        });
+
+        window.addEventListener('resize', () => {
+            document.querySelectorAll('.paper-card.is-open').forEach((card) => {
+                const body = card.querySelector('.paper-card-body');
+                const inner = card.querySelector('.paper-card-body-inner');
+                if (body && inner) body.style.maxHeight = `${inner.scrollHeight}px`;
+            });
+        });
+    };
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', setup);
+    } else {
+        setup();
+    }
+})();
