@@ -1064,3 +1064,80 @@ body.boot-active {
   0%   { opacity: 1; }
   100% { opacity: 0; }
 }
+
+/* Floating Navbar Styles */
+.floating-navbar {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+  background-color: rgba(0, 0, 0, 0.85);
+  border: 1px solid rgba(255, 189, 57, 0.4);
+  border-radius: 30px;
+  padding: 10px 15px;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease, max-width 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+  max-width: 54px;
+  overflow: hidden;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(255, 189, 57, 0.12);
+  white-space: nowrap;
+}
+
+.floating-navbar.visible {
+  opacity: 1;
+  visibility: visible;
+}
+
+.floating-navbar:hover {
+  max-width: 500px;
+}
+
+.hamburger-icon {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  width: 24px;
+  height: 20px;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.hamburger-icon span {
+  width: 100%;
+  height: 2px;
+  background-color: #ffbd39;
+  transition: all 0.3s ease;
+}
+
+.floating-nav-links {
+  display: flex;
+  gap: 20px;
+  margin-left: 20px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease 0s;
+}
+
+.floating-navbar:hover .floating-nav-links {
+  opacity: 1;
+  pointer-events: auto;
+  transition: opacity 0.3s ease 0.2s;
+}
+
+.floating-nav-links a {
+  color: #fff;
+  text-decoration: none;
+  font-family: 'Unispace', 'Consolas', monospace;
+  font-size: 14px;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.floating-nav-links a:hover {
+  color: #ffbd39;
+}
+

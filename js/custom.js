@@ -894,3 +894,28 @@ document.addEventListener("DOMContentLoaded", () => {
         setup();
     }
 })();
+
+// ============================================================
+//  FLOATING NAVBAR SCROLL LOGIC
+// ============================================================
+document.addEventListener('DOMContentLoaded', () => {
+    const floatingNavbar = document.getElementById('floating-navbar');
+    const heroSection = document.getElementById('home-section');
+
+    if (floatingNavbar && heroSection) {
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (!entry.isIntersecting) {
+                    floatingNavbar.classList.add('visible');
+                } else {
+                    floatingNavbar.classList.remove('visible');
+                }
+            });
+        }, {
+            root: null,
+            threshold: 0.1
+        });
+
+        observer.observe(heroSection);
+    }
+});
