@@ -1,17 +1,17 @@
 // ============================================================
 //  BOOT SEQUENCE OVERLAY
-//  Runs immediately before DOMContentLoaded so the overlay is
-//  visible from the very first paint.
+//  Plays on every page load — no session-storage skip logic.
+//  Full sequence target: ~3.5 – 4 seconds from first line to
+//  overlay removed from DOM.
 // ============================================================
 (function bootSequence() {
-  var SESSION_KEY = 'bootSequencePlayed';
-  var overlay     = document.getElementById('boot-overlay');
+  var overlay = document.getElementById('boot-overlay');
 
   // Expose a hook so the hero animation block knows when to start.
   // Set to null initially; replaced by actual starter once the hero block runs.
   window.__startHeroAnimation = null;
 
-  // Called once the overlay is gone (or skipped).
+  // Called once the overlay is gone.
   function kickHero() {
     if (typeof window.__startHeroAnimation === 'function') {
       window.__startHeroAnimation();
@@ -21,34 +21,31 @@
     }
   }
 
-  // ── Skip path (flag already set) ────────────────────────────
-  if (sessionStorage.getItem(SESSION_KEY)) {
-    if (overlay) overlay.remove();
-    kickHero();
-    return;
-  }
-
-  // ── Play path ───────────────────────────────────────────────
+  // Safety: if the overlay element is missing for any reason, hand off immediately.
   if (!overlay) { kickHero(); return; }
 
   document.body.classList.add('boot-active');
 
   var logEl = document.getElementById('boot-log');
 
+  // 9 lines × ~310ms avg + 800ms pause + 500ms fade = ~3.79s total
   var LINES = [
     { text: 'Initializing kernel...', status: '[OK]' },
     { text: 'Loading system modules...', status: '[OK]' },
     { text: 'Mounting filesystem...', status: '[OK]' },
+    { text: 'Verifying dependencies...', status: '[OK]' },
     { text: 'Establishing connection...', status: '[OK]' },
+    { text: 'Configuring environment...', status: '[OK]' },
     { text: 'Authenticating user: inzamam-ul-haque...', status: '[OK]' },
     { text: 'Loading portfolio interface...', status: '[OK]' },
     { text: 'Boot complete.', status: null, cls: 'boot-complete' }
   ];
 
-  // Gap between lines in ms (80–150 range)
-  var BASE_GAP = 95;
+  // ~270–350ms between each line
+  var BASE_GAP = 270;
+  var GAP_JITTER = 80;
 
-  var MAX_VISIBLE = 6; // scroll window — keep the log tight
+  var MAX_VISIBLE = 6; // sliding window — older lines scroll upward
   var lineEls = [];
 
   function addLine(cfg, onDone) {
@@ -75,24 +72,23 @@
       });
     });
 
-    // Scroll old lines upward by removing those beyond the window
+    // Scroll old lines upward by collapsing them out of the window
     if (lineEls.length > MAX_VISIBLE) {
       var oldest = lineEls.shift();
-      // Fade it out, then remove from DOM
-      oldest.style.transition = 'opacity 0.08s ease, max-height 0.12s ease, padding 0.12s ease';
+      oldest.style.transition = 'opacity 0.08s ease, max-height 0.12s ease';
       oldest.style.opacity = '0';
       oldest.style.maxHeight = '0';
       oldest.style.overflow = 'hidden';
       setTimeout(function () { if (oldest.parentNode) oldest.parentNode.removeChild(oldest); }, 140);
     }
 
-    if (onDone) setTimeout(onDone, BASE_GAP + Math.random() * 55);
+    if (onDone) setTimeout(onDone, BASE_GAP + Math.random() * GAP_JITTER);
   }
 
   function runLines(index) {
     if (index >= LINES.length) {
-      // All lines shown — pause, then wipe out
-      setTimeout(dismissOverlay, 500);
+      // All lines shown — hold briefly, then fade out
+      setTimeout(dismissOverlay, 800);
       return;
     }
     addLine(LINES[index], function () { runLines(index + 1); });
@@ -100,12 +96,12 @@
 
   function dismissOverlay() {
     overlay.classList.add('fade-out');
+    // Wait for the 0.4s CSS fade animation to finish, then remove from DOM
     setTimeout(function () {
       overlay.parentNode && overlay.parentNode.removeChild(overlay);
       document.body.classList.remove('boot-active');
-      sessionStorage.setItem(SESSION_KEY, '1');
       kickHero();
-    }, 420); // slightly longer than the 0.4s CSS animation
+    }, 500);
   }
 
   // Kick off after a short ramp-up pause
