@@ -1,17 +1,18 @@
 // ============================================================
 //  BOOT SEQUENCE OVERLAY
-//  Plays on every page load — no session-storage skip logic.
-//  Full sequence target: ~3.5 – 4 seconds from first line to
-//  overlay removed from DOM.
+//  sessionStorage is tab-scoped: a new tab gets a fresh session
+//  (sequence plays), but a reload within the same tab reuses the
+//  existing session (sequence skipped). Full sequence: ~3.5–4s.
 // ============================================================
 (function bootSequence() {
-  var overlay = document.getElementById('boot-overlay');
+  var SESSION_KEY = 'bootSequencePlayed';
+  var overlay     = document.getElementById('boot-overlay');
 
   // Expose a hook so the hero animation block knows when to start.
   // Set to null initially; replaced by actual starter once the hero block runs.
   window.__startHeroAnimation = null;
 
-  // Called once the overlay is gone.
+  // Called once the overlay is gone (or skipped).
   function kickHero() {
     if (typeof window.__startHeroAnimation === 'function') {
       window.__startHeroAnimation();
@@ -21,7 +22,14 @@
     }
   }
 
-  // Safety: if the overlay element is missing for any reason, hand off immediately.
+  // ── Skip path: same tab reload — flag already set ───────────
+  if (sessionStorage.getItem(SESSION_KEY)) {
+    if (overlay) overlay.remove();
+    kickHero();
+    return;
+  }
+
+  // ── Play path: new tab — fresh session ──────────────────────
   if (!overlay) { kickHero(); return; }
 
   document.body.classList.add('boot-active');
@@ -100,6 +108,7 @@
     setTimeout(function () {
       overlay.parentNode && overlay.parentNode.removeChild(overlay);
       document.body.classList.remove('boot-active');
+      sessionStorage.setItem(SESSION_KEY, '1');
       kickHero();
     }, 500);
   }
