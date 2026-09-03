@@ -2,14 +2,13 @@ document.addEventListener("DOMContentLoaded", () => {
     const matrixCanvas = document.getElementById('matrix-canvas');
     if (matrixCanvas) {
         const ctx = matrixCanvas.getContext('2d');
-        const heroSection = document.getElementById('home-section');
 
+        // Matrix canvas now covers the full viewport for all sections
         function resizeMatrixCanvas() {
-            if (!heroSection) return;
             matrixCanvas.width = window.innerWidth;
-            matrixCanvas.height = heroSection.offsetHeight;
+            matrixCanvas.height = window.innerHeight;
             matrixCanvas.style.width = `${window.innerWidth}px`;
-            matrixCanvas.style.height = `${heroSection.offsetHeight}px`;
+            matrixCanvas.style.height = `${window.innerHeight}px`;
             ctx.setTransform(1, 0, 0, 1, 0, 0);
         }
 
@@ -20,7 +19,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         function initMatrix() {
             const width = matrixCanvas.width || window.innerWidth;
-            const height = matrixCanvas.height || heroSection.offsetHeight;
+            const height = matrixCanvas.height || window.innerHeight;
             columns = Math.floor(width / fontSize);
             drops = Array(columns).fill(0);
             ctx.clearRect(0, 0, width, height);
@@ -28,7 +27,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         function drawMatrix() {
             const width = matrixCanvas.width || window.innerWidth;
-            const height = matrixCanvas.height || heroSection.offsetHeight;
+            const height = matrixCanvas.height || window.innerHeight;
             ctx.fillStyle = 'rgba(1, 4, 8, 0.12)';
             ctx.fillRect(0, 0, width, height);
 

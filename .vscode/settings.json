@@ -1,0 +1,8 @@
+{
+    "chat.tools.terminal.autoApprove": {
+        "/^python -c \"\nfrom PIL import Image\nimport os\nfor f in \\['linkedIn\\.png', 'github\\.png'\\]:\n    img = Image\\.open\\(f\\)\n    print\\(f'\\{f\\}: \\{img\\.size\\[0\\]\\}x\\{img\\.size\\[1\\]\\} \\(aspect: \\{img\\.size\\[0\\]/img\\.size\\[1\\]:\\.2f\\}\\)'\\)\n\"$/": {
+            "approve": true,
+            "matchCommandLine": true
+        }
+    }
+}

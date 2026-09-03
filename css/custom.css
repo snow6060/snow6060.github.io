@@ -50,6 +50,12 @@
   margin-right: auto;
 }
 
+.about-me-centered h2.mb-4 {
+  color: #fff;
+  font-size: 2.5rem;
+  font-weight: 700;
+}
+
 .about-me-centered h1.big {
   left: 50%;
   transform: translateX(-50%);
@@ -211,10 +217,12 @@
 
 
 /* All content sits on top */
+/* Override body background from style.css */
 body {
-  background: #010408;
-  font-family: 'Unispace', 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
-  color: #f5f7fa;
+  background: #010408 !important;
+  font-family: 'Unispace', 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace !important;
+  color: #f5f7fa !important;
+  background-color: #010408 !important;
 }
 
 body,
@@ -262,13 +270,13 @@ html {
 }
 
 #matrix-canvas {
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   width: 100%;
-  height: 100%;
+  height: 100vh;
   pointer-events: none;
-  z-index: 0;
+  z-index: -1;
   display: block;
 }
 
@@ -820,6 +828,23 @@ html {
   font-family: 'Unispace', 'Consolas', monospace;
 }
 
+/* IPYNB badge - distinct color for Jupyter notebooks */
+/* IPYNB badge - distinct color for Jupyter notebooks */
+.pdf-file-icon-label.ipynb-badge {
+  color: #4ecdc4;
+}
+
+/* IPYNB icon frame styling - distinct teal border for notebooks */
+.pdf-file-icon.ipynb-icon {
+  border-color: rgba(78, 205, 196, 0.55);
+  box-shadow: inset 0 0 8px rgba(78, 205, 196, 0.08);
+}
+
+.pdf-file-icon.ipynb-icon .pdf-file-icon-fold {
+  border-left-color: rgba(78, 205, 196, 0.55);
+  border-bottom-color: rgba(78, 205, 196, 0.55);
+}
+
 .paper-card-meta {
   display: flex;
   flex-direction: column;
@@ -893,17 +918,38 @@ html {
 /*======================================
 //--//-->   CONTACT
 ======================================*/
+.contact-section {
+  position: relative;
+  z-index: 2;
+}
+
 #contact-section .heading-section p {
   margin-bottom: 0.5rem;
 }
 
+#contact-section .heading-section h2,
+#contact-section .heading-section p,
+#contact-section .contact-info .box,
+#contact-section .contact-info .box h3,
+#contact-section .contact-info .box p {
+  color: #f5f7fa !important;
+}
+
+#contact-section .contact-info p a {
+  color: #ffbd39 !important;
+}
+
 #contact-section .contact-info .box {
-  padding: 0.25rem 0.75rem 0.5rem;
+  padding: 1rem 0.75rem;
+  background: rgba(255, 189, 57, 0.06);
+  border: 1px solid rgba(255, 189, 57, 0.2);
+  border-radius: 4px;
 }
 
 #contact-section .contact-info .box h3 {
   margin-top: 0;
   margin-bottom: 0.45rem;
+  color: #ffbd39 !important;
 }
 
 #contact-section .ftco-footer-social {
@@ -911,9 +957,13 @@ html {
   padding-bottom: 1rem;
 }
 
-#contact-section .ftco-footer-social li a.social-logo-link {
-  height: auto;
-  width: auto;
+#contact-section .ftco-footer-social li {
+  color: #f5f7fa !important;
+}
+
+.ftco-footer-social li a.social-logo-link {
+  height: 28px;
+  width: 28px;
   float: none;
   display: flex;
   align-items: center;
@@ -922,9 +972,24 @@ html {
   border-radius: 0;
 }
 
-#contact-section .ftco-footer-social li a.social-logo-link img {
+.ftco-footer-social li a.social-logo-link img {
+  height: 28px;
+  width: 28px;
   display: block;
-  height: 44px;
-  width: auto;
+  object-fit: contain;
+}
+
+/* Footer */
+.ftco-footer {
+  background: #000 !important;
+  position: relative;
+  z-index: 2;
+  padding: 0.5em 0 !important;
+  font-size: 13px;
+}
+
+.ftco-footer p,
+.ftco-footer a {
+  color: rgba(255, 255, 255, 0.7) !important;
 }
 
