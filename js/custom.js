@@ -1,4 +1,119 @@
+// ============================================================
+//  BOOT SEQUENCE OVERLAY
+//  Runs immediately before DOMContentLoaded so the overlay is
+//  visible from the very first paint.
+// ============================================================
+(function bootSequence() {
+  var SESSION_KEY = 'bootSequencePlayed';
+  var overlay     = document.getElementById('boot-overlay');
+
+  // Expose a hook so the hero animation block knows when to start.
+  // Set to null initially; replaced by actual starter once the hero block runs.
+  window.__startHeroAnimation = null;
+
+  // Called once the overlay is gone (or skipped).
+  function kickHero() {
+    if (typeof window.__startHeroAnimation === 'function') {
+      window.__startHeroAnimation();
+    } else {
+      // Hero block not yet wired up — store a flag; it will read it.
+      window.__heroShouldStartNow = true;
+    }
+  }
+
+  // ── Skip path (flag already set) ────────────────────────────
+  if (sessionStorage.getItem(SESSION_KEY)) {
+    if (overlay) overlay.remove();
+    kickHero();
+    return;
+  }
+
+  // ── Play path ───────────────────────────────────────────────
+  if (!overlay) { kickHero(); return; }
+
+  document.body.classList.add('boot-active');
+
+  var logEl = document.getElementById('boot-log');
+
+  var LINES = [
+    { text: 'Initializing kernel...', status: '[OK]' },
+    { text: 'Loading system modules...', status: '[OK]' },
+    { text: 'Mounting filesystem...', status: '[OK]' },
+    { text: 'Establishing connection...', status: '[OK]' },
+    { text: 'Authenticating user: inzamam-ul-haque...', status: '[OK]' },
+    { text: 'Loading portfolio interface...', status: '[OK]' },
+    { text: 'Boot complete.', status: null, cls: 'boot-complete' }
+  ];
+
+  // Gap between lines in ms (80–150 range)
+  var BASE_GAP = 95;
+
+  var MAX_VISIBLE = 6; // scroll window — keep the log tight
+  var lineEls = [];
+
+  function addLine(cfg, onDone) {
+    var el = document.createElement('div');
+    el.className = 'boot-line' + (cfg.cls ? ' ' + cfg.cls : '');
+
+    if (cfg.status) {
+      el.textContent = cfg.text;
+      var badge = document.createElement('span');
+      badge.className = 'boot-status';
+      badge.textContent = ' ' + cfg.status;
+      el.appendChild(badge);
+    } else {
+      el.textContent = cfg.text;
+    }
+
+    logEl.appendChild(el);
+    lineEls.push(el);
+
+    // Trigger CSS transition on next frame
+    requestAnimationFrame(function () {
+      requestAnimationFrame(function () {
+        el.classList.add('visible');
+      });
+    });
+
+    // Scroll old lines upward by removing those beyond the window
+    if (lineEls.length > MAX_VISIBLE) {
+      var oldest = lineEls.shift();
+      // Fade it out, then remove from DOM
+      oldest.style.transition = 'opacity 0.08s ease, max-height 0.12s ease, padding 0.12s ease';
+      oldest.style.opacity = '0';
+      oldest.style.maxHeight = '0';
+      oldest.style.overflow = 'hidden';
+      setTimeout(function () { if (oldest.parentNode) oldest.parentNode.removeChild(oldest); }, 140);
+    }
+
+    if (onDone) setTimeout(onDone, BASE_GAP + Math.random() * 55);
+  }
+
+  function runLines(index) {
+    if (index >= LINES.length) {
+      // All lines shown — pause, then wipe out
+      setTimeout(dismissOverlay, 500);
+      return;
+    }
+    addLine(LINES[index], function () { runLines(index + 1); });
+  }
+
+  function dismissOverlay() {
+    overlay.classList.add('fade-out');
+    setTimeout(function () {
+      overlay.parentNode && overlay.parentNode.removeChild(overlay);
+      document.body.classList.remove('boot-active');
+      sessionStorage.setItem(SESSION_KEY, '1');
+      kickHero();
+    }, 420); // slightly longer than the 0.4s CSS animation
+  }
+
+  // Kick off after a short ramp-up pause
+  setTimeout(function () { runLines(0); }, 120);
+})();
+
 document.addEventListener("DOMContentLoaded", () => {
+
     const matrixCanvas = document.getElementById('matrix-canvas');
     if (matrixCanvas) {
         const ctx = matrixCanvas.getContext('2d');
@@ -269,8 +384,22 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    // start typing after a short delay
-    setTimeout(typeChar, 800);
+    // start typing — deferred until the boot overlay hands off control.
+    // kickHero() (called by the boot IIFE) sets window.__startHeroAnimation
+    // to this function. If the boot was skipped (session flag), the IIFE set
+    // window.__heroShouldStartNow = true before DOMContentLoaded fired, so
+    // we start right away with a brief settling pause.
+    function startHero() {
+        setTimeout(typeChar, 300);
+    }
+
+    // Register with the boot IIFE's handoff mechanism
+    window.__startHeroAnimation = startHero;
+
+    // If boot was already dismissed before this code ran, start now
+    if (window.__heroShouldStartNow) {
+        startHero();
+    }
 
     let enterBtn;
 

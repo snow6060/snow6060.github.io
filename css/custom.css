@@ -579,9 +579,9 @@ html {
   display: flex;
   flex-direction: column;
   flex-shrink: 0;
-  visibility: visible;
-  opacity: 1;
-  transition: opacity 0.2s ease;
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.3s ease;
 }
 
 .terminal-frame.is-visible {
@@ -993,3 +993,74 @@ html {
   color: rgba(255, 255, 255, 0.7) !important;
 }
 
+/*======================================
+//--//--> BOOT SEQUENCE OVERLAY
+======================================*/
+
+/* Lock scroll while overlay is active */
+body.boot-active {
+  overflow: hidden;
+}
+
+/* Full-screen overlay panel */
+#boot-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  background: #010408;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-start;
+  padding: 0 0 10vh 8vw;
+  pointer-events: all;
+}
+
+/* Log container — sliding window that keeps only recent lines visible */
+#boot-log {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  max-height: calc(8 * 1.6em);   /* show at most 8 lines */
+  width: 100%;
+  max-width: 700px;
+}
+
+/* Individual boot line */
+.boot-line {
+  font-family: 'Unispace', 'Consolas', 'SFMono-Regular', monospace;
+  font-size: clamp(0.78rem, 1.45vw, 0.98rem);
+  line-height: 1.6;
+  color: #F09527;
+  white-space: nowrap;
+  opacity: 0;
+  transform: translateY(5px);
+  transition: opacity 0.1s ease, transform 0.1s ease;
+  flex-shrink: 0;
+}
+
+.boot-line.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* The [OK] status badge */
+.boot-line .boot-status {
+  color: #27c93f;
+  margin-left: 0.4ch;
+}
+
+/* "Boot complete." line is brighter */
+.boot-line.boot-complete {
+  color: #ffbd39;
+  font-weight: 700;
+}
+
+/* Overlay exit transition */
+#boot-overlay.fade-out {
+  animation: bootFadeOut 0.4s ease forwards;
+}
+
+@keyframes bootFadeOut {
+  0%   { opacity: 1; }
+  100% { opacity: 0; }
+}
