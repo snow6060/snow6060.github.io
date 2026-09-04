@@ -933,23 +933,51 @@ html {
 #contact-section .contact-info .box h3,
 #contact-section .contact-info .box p {
   color: #f5f7fa !important;
+  font-size: 14px;
 }
 
 #contact-section .contact-info p a {
+  color: #f5f7fa !important;
+}
+
+#contact-section .contact-info p a:hover {
   color: #ffbd39 !important;
 }
 
 #contact-section .contact-info .box {
-  padding: 1rem 0.75rem;
-  background: rgba(255, 189, 57, 0.06);
-  border: 1px solid rgba(255, 189, 57, 0.2);
-  border-radius: 4px;
+  padding: 1rem 0;
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#contact-section .contact-info .icon-container {
+  width: 100px;
+  height: 100px;
+  background: #1a1a1a;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 25px;
+}
+
+#contact-section .contact-info .icon-container svg {
+  width: 32px;
+  height: 32px;
+  color: #ffbd39;
 }
 
 #contact-section .contact-info .box h3 {
   margin-top: 0;
-  margin-bottom: 0.45rem;
-  color: #ffbd39 !important;
+  margin-bottom: 1rem;
+  color: #fff !important;
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 1px;
 }
 
 #contact-section .ftco-footer-social {
